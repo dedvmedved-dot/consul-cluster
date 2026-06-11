@@ -1,0 +1,35 @@
+digraph Architecture {
+    label="Архитектура Consul Cluster + DNS";
+    labelloc=t; fontsize=20; fontname="Arial";
+    rankdir=TB; splines=ortho; nodesep=0.8; ranksep=0.7;
+    node [shape=box, style=rounded, fontname="Arial", fontsize=10];
+    subgraph cluster_servers {
+        label="Consul Servers (Raft)";
+        style=filled; fillcolor="#E6F4EA"; fontsize=13;
+        cs1 [label="consul-server1\n.122.91\n(Leader)", fillcolor="#A5D6A7", style=filled];
+        cs2 [label="consul-server2\n.122.92\n(Follower)", fillcolor="#C8E6C9", style=filled];
+        cs3 [label="consul-server3\n.122.93\n(Follower)", fillcolor="#C8E6C9", style=filled];
+        cs1 -> cs2 [label="Raft\nReplication", dir=both, color="#34A853"];
+        cs2 -> cs3 [label="Raft\nReplication", dir=both, color="#34A853"];
+        cs3 -> cs1 [label="Raft\nReplication", dir=both, color="#34A853"];
+    }
+    subgraph cluster_clients {
+        label="Consul Clients + WebApp";
+        style=filled; fillcolor="#FFF3E0"; fontsize=13;
+        w1 [label="web-node1\n.122.101\nNginx + Consul Client", fillcolor="#FFE0B2", style=filled];
+        w2 [label="web-node2\n.122.102\nNginx + Consul Client", fillcolor="#FFE0B2", style=filled];
+        w3 [label="web-node3\n.122.103\nNginx + Consul Client", fillcolor="#FFE0B2", style=filled];
+    }
+    subgraph cluster_dns_block {
+        label="DNS Resolution";
+        style=filled; fillcolor="#E8F0FE"; fontsize=13;
+        dns [label="Consul DNS :8600\nwebapp.service.consul\n→ A: .101, .102, .103\n\nExternal-DNS скрипт\n→ BIND зона\n→ webapp.diveschool.spb.ru", fillcolor="#BBDEFB", style=filled];
+        health [label="Health Check\nHTTP :80/\nкаждые 10 сек\nинтервал 2 сек", shape=note, fillcolor="#FFCDD2", style=filled];
+    }
+    w1 -> cs1 [label="Регистрация\nсервиса webapp", color="#FB8C00"];
+    w2 -> cs1 [color="#FB8C00"];
+    w3 -> cs1 [color="#FB8C00"];
+    cs1 -> dns [color="#4285F4", penwidth=2];
+    dns -> w1 [label="DNS-ответ", color="#4285F4"];
+    w1 -> health [label="Проверка"];
+}

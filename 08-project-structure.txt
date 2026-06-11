@@ -1,0 +1,1 @@
+sk@skhome01:~/consul-cluster$ find . -type f ! -path "./.git/*" ! -name "*.zip" | sort

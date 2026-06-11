@@ -1,0 +1,21 @@
+sk@skhome01:~/consul-cluster$ curl -s http://192.168.122.91:8500/v1/catalog/service/webapp | python3 -m json.tool | head -20
+[
+    {
+        "ID": "8e3d5fcb-ec7d-5a46-5d33-c890f19c4716",
+        "Node": "web-node1",
+        "Address": "192.168.122.101",
+        "Datacenter": "dc1",
+        "TaggedAddresses": {
+            "lan": "192.168.122.101",
+            "lan_ipv4": "192.168.122.101",
+            "wan": "192.168.122.101",
+            "wan_ipv4": "192.168.122.101"
+        },
+        "NodeMeta": {
+            "consul-network-segment": "",
+            "consul-version": "1.18.0"
+        },
+        "ServiceKind": "",
+        "ServiceID": "webapp",
+        "ServiceName": "webapp",
+        "ServiceTags": [],

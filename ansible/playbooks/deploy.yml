@@ -1,0 +1,11 @@
+---
+- hosts: consul_servers
+  become: yes
+  roles:
+    - roles/consul-server
+
+- hosts: consul_clients
+  become: yes
+  roles:
+    - roles/consul-client
+    - roles/webapp

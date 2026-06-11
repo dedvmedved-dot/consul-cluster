@@ -1,0 +1,13 @@
+digraph ExternalDNS {
+    label="External-DNS: интеграция Consul с BIND";
+    labelloc=t; fontsize=18; fontname="Arial";
+    rankdir=TB; splines=ortho; nodesep=0.7; ranksep=0.5;
+    node [shape=box, style=rounded, fontname="Arial", fontsize=10];
+    consul [label="Consul\nHealth API\n/v1/health/service/\nwebapp?passing", fillcolor="#E6F4EA", style=filled];
+    script [label="external-dns-update.sh\n1. Запрашивает\n   здоровые инстансы\n2. Генерирует\n   DNS-зону\n3. Обновляет BIND\n4. rndc reload", fillcolor="#FFF3E0", style=filled];
+    bind [label="BIND DNS-сервер\nwebapp.diveschool.spb.ru\nA: только здоровые IP\nTTL: 10 секунд", fillcolor="#E8F0FE", style=filled];
+    consul -> script [label="JSON\n(IP здоровых\nинстансов)", color="#34A853", penwidth=2];
+    script -> bind [label="Обновление\nзоны", color="#FB8C00", penwidth=2];
+    note [label="Это демонстрация концепции\nexternal-dns. В production\nиспользуется API Cloudflare,\nAWS Route53, или PowerDNS.", shape=note, fillcolor="#FFCDD2", style=filled];
+    script -> note [style=dashed];
+}

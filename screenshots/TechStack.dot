@@ -1,0 +1,28 @@
+digraph TechStack {
+    label="Технологический стек Consul + External-DNS";
+    labelloc=t; fontsize=20; fontname="Arial";
+    rankdir=TB; splines=ortho; nodesep=0.8; ranksep=0.6;
+    node [shape=box, style=rounded, fontname="Arial", fontsize=11];
+    subgraph cluster_iaac {
+        label="Infrastructure as Code"; style=filled; fillcolor="#E0E0E0"; fontsize=13;
+        tf [label="Terraform\nСоздание 6 ВМ", fillcolor="#BDBDBD", style=filled];
+        ansible [label="Ansible\nРоли: consul-server,\nconsul-client, webapp", fillcolor="#BDBDBD", style=filled];
+    }
+    subgraph cluster_consul {
+        label="Consul Cluster"; style=filled; fillcolor="#E6F4EA"; fontsize=13;
+        consul [label="Consul 1.18\nService Discovery\nDNS-сервер (порт 8600)\nHTTP API (порт 8500)\nHealth Checks\nRaft Consensus", fillcolor="#A5D6A7", style=filled];
+    }
+    subgraph cluster_dns {
+        label="DNS и балансировка"; style=filled; fillcolor="#FFF3E0"; fontsize=13;
+        dns [label="Consul DNS\nwebapp.service.consul\n→ IP здоровых нод\n\nExternal-DNS скрипт\nОбновление BIND\nwebapp.diveschool.spb.ru", fillcolor="#FFE0B2", style=filled];
+    }
+    subgraph cluster_web {
+        label="Веб-портал"; style=filled; fillcolor="#FCE8E6"; fontsize=13;
+        nginx [label="Nginx\nweb-node1,2,3\n:80", fillcolor="#FFCDD2", style=filled];
+    }
+    tf -> consul [style=dotted];
+    ansible -> consul [style=dashed];
+    ansible -> nginx [style=dashed];
+    consul -> dns [label="DNS-записи", color="#FB8C00", penwidth=2];
+    dns -> nginx [label="резолвит", color="#EA4335", penwidth=2];
+}

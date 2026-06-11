@@ -1,0 +1,12 @@
+digraph DNS_Flow {
+    label="Путь DNS-запроса к веб-порталу";
+    labelloc=t; fontsize=20; fontname="Arial";
+    rankdir=TB; splines=ortho; nodesep=0.6; ranksep=0.4;
+    node [shape=box, style=rounded, fontname="Arial", fontsize=9];
+    s1 [label="1. Клиент\ncurl webapp.service.consul", fillcolor="#E8F0FE", style=filled];
+    s2 [label="2. DNS-запрос\nПорт 8600\nК Consul серверу", fillcolor="#FFF3E0", style=filled];
+    s3 [label="3. Consul проверяет\nHealth status\nТолько PASSING", fillcolor="#E6F4EA", style=filled];
+    s4 [label="4. DNS-ответ\nA: .101\nA: .102\nA: .103\n(Round-Robin)", fillcolor="#F3E5F5", style=filled];
+    s5 [label="5. Клиент выбирает\nодин IP\nОткрывает HTTP", fillcolor="#FCE8E6", style=filled];
+    s1 -> s2; s2 -> s3; s3 -> s4; s4 -> s5;
+}

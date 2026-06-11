@@ -1,0 +1,3 @@
+sk@skhome01:~/consul-cluster$ dig @192.168.122.91 -p 8600 webapp.service.consul +short
+192.168.122.101
+192.168.122.102

@@ -1,0 +1,11 @@
+digraph DNS_Failover {
+    label="DNS-балансировка и отказоустойчивость";
+    labelloc=t; fontsize=20; fontname="Arial";
+    rankdir=TB; splines=ortho; nodesep=0.8; ranksep=0.6;
+    node [shape=box, style=rounded, fontname="Arial", fontsize=10];
+    normal [label="НОРМАЛЬНЫЙ РЕЖИМ\nwebapp.service.consul:\nA: 192.168.122.101\nA: 192.168.122.102\nA: 192.168.122.103\n\nВсе 3 ноды работают\nHealth check: PASSING", fillcolor="#C8E6C9", style=filled];
+    fail [label="ОТКАЗ web-node1\nConsul health check:\nHTTP :80/ → FAIL\nTTL истекает\nНода исключается\n\nDNS-ответ:\nA: 192.168.122.102\nA: 192.168.122.103\n\nweb-node1: НЕТ в DNS", fillcolor="#FFCDD2", style=filled];
+    recover [label="ВОССТАНОВЛЕНИЕ\nweb-node1 снова\nотвечает на health check\nConsul возвращает\nноду в DNS\n\nDNS-ответ:\nA: .101, .102, .103\n\nАвтоматически!", fillcolor="#C8E6C9", style=filled];
+    normal -> fail [label="virsh destroy\nweb-node1\n\n10-12 секунд"];
+    fail -> recover [label="virsh start\nweb-node1\n\n10-12 секунд"];
+}

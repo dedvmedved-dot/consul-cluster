@@ -1,0 +1,29 @@
+digraph CGNAT_Problem {
+    label="CGNAT: почему VPS не может подключиться к домашнему KVM";
+    labelloc=t; fontsize=18; fontname="Arial";
+    rankdir=TB; splines=ortho; nodesep=0.8; ranksep=0.6;
+    node [shape=box, style=rounded, fontname="Arial", fontsize=10];
+    subgraph cluster_home {
+        label="Домашняя сеть";
+        style=filled; fillcolor="#FCE8E6"; fontsize=13;
+        router [label="Маршрутизатор\n10.57.30.54\n(приватный IP от CGNAT)", fillcolor="#FFCDD2", style=filled];
+        kvm [label="KVM Хост\n192.168.122.1\nConsul Cluster\nWeb Servers", fillcolor="#FFCDD2", style=filled];
+    }
+    subgraph cluster_isp {
+        label="Провайдер (CGNAT)";
+        style=filled; fillcolor="#FFF3E0"; fontsize=13;
+        cgnat [label="CGNAT Шлюз\n10.57.30.1\n188.130.149.164\n(серый IP)\n\nNAT второго уровня\nНесколько абонентов\nза одним IP", shape=octagon, fillcolor="#FFE0B2", style=filled];
+    }
+    subgraph cluster_internet {
+        label="Интернет";
+        style=filled; fillcolor="#E8F0FE"; fontsize=13;
+        vps [label="VPS\n170.168.91.95\nПубличный IP\nПорт 51820 открыт\nWireGuard слушает", fillcolor="#BBDEFB", style=filled];
+    }
+    kvm -> router;
+    router -> cgnat [label="UDP :51820\n(исходящие)", color="#34A853"];
+    cgnat -> vps [label="UDP пакет\nдоходит ✅", color="#34A853", penwidth=2];
+    vps -> cgnat [label="UDP ответ\n(входящие)", color="#EA4335", penwidth=2];
+    cgnat -> router [label="CGNAT отбрасывает\nвходящий UDP\nНет правила NAT\nдля обратного трафика", color="#EA4335", style=dashed, penwidth=2];
+    note [label="WireGuard требует\nДВУСТОРОННЕГО обмена UDP.\nCGNAT пропускает исходящие,\nно блокирует ВХОДЯЩИЕ\nпакеты.\n\nРешение для провайдера:\nВыделить белый IP\nили настроить\nPort Forwarding.", shape=note, fillcolor="#FFCDD2", style=filled];
+    cgnat -> note [style=dashed];
+}

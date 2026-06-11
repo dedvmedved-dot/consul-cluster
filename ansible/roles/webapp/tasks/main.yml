@@ -1,0 +1,26 @@
+---
+- name: Установка Nginx
+  apt:
+    name: nginx
+    state: present
+    update_cache: yes
+
+- name: Создание index.html с именем хоста
+  copy:
+    dest: /var/www/html/index.html
+    content: |
+      <!DOCTYPE html>
+      <html>
+      <head><title>WebApp - {{ inventory_hostname }}</title></head>
+      <body>
+        <h1>WebApp на {{ inventory_hostname }}</h1>
+        <p>IP: {{ ansible_host }}</p>
+        <p>Время: {{ ansible_date_time.iso8601 }}</p>
+      </body>
+      </html>
+
+- name: Запуск Nginx
+  systemd:
+    name: nginx
+    state: started
+    enabled: yes

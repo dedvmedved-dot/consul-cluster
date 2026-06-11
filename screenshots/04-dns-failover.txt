@@ -1,0 +1,14 @@
+sk@skhome01:~/consul-cluster$ echo "=== Выключаем web-node1 ==="
+=== Выключаем web-node1 ===
+sk@skhome01:~/consul-cluster$ virsh destroy web-node1
+Domain 'web-node1' destroyed
+
+sk@skhome01:~/consul-cluster$ echo "=== DNS после отказа ==="
+=== DNS после отказа ===
+sk@skhome01:~/consul-cluster$ dig @192.168.122.91 -p 8600 webapp.service.consul +short
+192.168.122.102
+
+sk@skhome01:~/consul-cluster$ echo "=== Восстановление ==="
+=== Восстановление ===
+sk@skhome01:~/consul-cluster$ virsh start web-node1
+Domain web-node1 started

@@ -1,0 +1,82 @@
+---
+- name: Установка unzip
+  apt:
+    name: unzip
+    state: present
+    update_cache: yes
+
+- name: Создание пользователя consul
+  user:
+    name: consul
+    system: yes
+    create_home: no
+
+- name: Создание директорий
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: consul
+    group: consul
+  loop:
+    - /etc/consul.d
+    - /var/lib/consul
+
+- name: Копирование Consul архива
+  copy:
+    src: ../../consul_1.18.0_linux_amd64.zip
+    dest: /tmp/consul.zip
+
+- name: Распаковка Consul
+  unarchive:
+    src: /tmp/consul.zip
+    dest: /usr/local/bin/
+    remote_src: yes
+    creates: /usr/local/bin/consul
+
+- name: Настройка Consul client
+  template:
+    src: consul-client.hcl.j2
+    dest: /etc/consul.d/consul.hcl
+
+- name: Копирование systemd unit
+  copy:
+    dest: /etc/systemd/system/consul.service
+    content: |
+      [Unit]
+      Description=Consul Agent
+      After=network.target
+      [Service]
+      User=consul
+      ExecStart=/usr/local/bin/consul agent -config-dir=/etc/consul.d/
+      ExecReload=/usr/local/bin/consul reload
+      Restart=always
+      [Install]
+      WantedBy=multi-user.target
+
+- name: Запуск Consul client
+  systemd:
+    name: consul
+    state: started
+    enabled: yes
+    daemon_reload: yes
+
+- name: Регистрация сервиса webapp в Consul
+  copy:
+    dest: /etc/consul.d/webapp.json
+    content: |
+      {
+        "service": {
+          "name": "webapp",
+          "port": 80,
+          "check": {
+            "name": "nginx HTTP check",
+            "http": "http://localhost:80/",
+            "interval": "10s",
+            "timeout": "2s"
+          }
+        }
+      }
+
+- name: Перезагрузка Consul для регистрации сервиса
+  command: consul reload
+  ignore_errors: yes

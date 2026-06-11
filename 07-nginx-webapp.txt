@@ -1,0 +1,10 @@
+sk@skhome01:~/consul-cluster$ curl -s http://192.168.122.101/
+<!DOCTYPE html>
+<html>
+<head><title>WebApp - web-node1</title></head>
+<body>
+  <h1>WebApp на web-node1</h1>
+  <p>IP: 192.168.122.101</p>
+  <p>Время: 2026-06-11T10:26:27Z</p>
+</body>
+</html>

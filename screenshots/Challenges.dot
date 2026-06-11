@@ -1,0 +1,17 @@
+digraph Challenges {
+    label="Пройденные трудности";
+    labelloc=t; fontsize=18; fontname="Arial";
+    rankdir=TB; splines=ortho; nodesep=0.7; ranksep=0.5;
+    node [shape=box, style=rounded, fontname="Arial", fontsize=10];
+    start [label="Начало", shape=oval, fillcolor="#E8F0FE", style=filled];
+    p1 [label="Consul 1.18.1 — 404\nСсылка устарела", fillcolor="#FFCDD2", style=filled];
+    s1 [label="Скачали 1.18.0\nчерез браузер", fillcolor="#C8E6C9", style=filled];
+    p2 [label="Пользователь consul\nне существовал\nдо создания директорий", fillcolor="#FFCDD2", style=filled];
+    s2 [label="Поменяли порядок:\nuser → directories", fillcolor="#C8E6C9", style=filled];
+    p3 [label="WireGuard: CGNAT\nблокирует входящие\nUDP пакеты", fillcolor="#FFCDD2", style=filled];
+    s3 [label="External-DNS скрипт\nвместо прямого\nтуннеля", fillcolor="#C8E6C9", style=filled];
+    p4 [label="web-node3: unzip\nне установился", fillcolor="#FFCDD2", style=filled];
+    s4 [label="Повторный запуск\nAnsible --limit", fillcolor="#C8E6C9", style=filled];
+    success [label="Всё работает!", shape=oval, fillcolor="#A5D6A7", style=filled, penwidth=2];
+    start -> p1 -> s1 -> p2 -> s2 -> p3 -> s3 -> p4 -> s4 -> success;
+}

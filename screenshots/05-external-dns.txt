@@ -1,0 +1,13 @@
+sk@skhome01:~/consul-cluster$ ./external-dns-update.sh
+=== External-DNS Update ===
+Читаем инстансы сервиса webapp из Consul...
+Найдены инстансы:
+192.168.122.102
+./external-dns-update.sh: строка 26: /tmp/db.diveschool.spb.ru: Отказано в доступе
+./external-dns-update.sh: строка 34: /tmp/db.diveschool.spb.ru: Отказано в доступе
+  ✅ Добавлен A-запись: webapp → 192.168.122.102
+server reload successful
+DNS-зона обновлена и загружена
+
+=== Проверка DNS ===
+192.168.122.102

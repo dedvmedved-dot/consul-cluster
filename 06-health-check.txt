@@ -1,0 +1,31 @@
+sk@skhome01:~/consul-cluster$ curl -s http://192.168.122.91:8500/v1/health/service/webapp?passing | python3 -m json.tool | head -30
+[
+    {
+        "Node": {
+            "ID": "24090cee-788f-3d6f-bc59-78e64a90f0ac",
+            "Node": "web-node2",
+            "Address": "192.168.122.102",
+            "Datacenter": "dc1",
+            "TaggedAddresses": {
+                "lan": "192.168.122.102",
+                "lan_ipv4": "192.168.122.102",
+                "wan": "192.168.122.102",
+                "wan_ipv4": "192.168.122.102"
+            },
+            "Meta": {
+                "consul-network-segment": "",
+                "consul-version": "1.18.0"
+            },
+            "CreateIndex": 34,
+            "ModifyIndex": 36
+        },
+        "Service": {
+            "ID": "webapp",
+            "Service": "webapp",
+            "Tags": [],
+            "Address": "",
+            "Meta": null,
+            "Port": 80,
+            "Weights": {
+                "Passing": 1,
+                "Warning": 1
